@@ -1,14 +1,14 @@
 """
 app/routers/ai_advisor.py
 ──────────────────────────
-The AI Financial Advisor — powered by your local qwen3:30b on DGX Spark.
+The AI Financial Advisor — powered by your local gpt-oss:120b on DGX Spark.
 
 POST /api/advisor  →  Ask for personalized financial advice
 
 How it works:
 1. Fetch the user's current month summary from the DB
 2. Build a rich system prompt with their actual financial data
-3. Send to Ollama (qwen3:30b running locally on DGX Spark)
+3. Send to Ollama (gpt-oss:120b running locally on DGX Spark)
 4. Stream back intelligent, personalized financial advice
 """
 import httpx
@@ -71,7 +71,7 @@ async def get_advice(
     Get personalized AI financial advice based on your actual data.
 
     The AI reads your income, expenses, and savings rate,
-    then gives tailored recommendations using qwen3:30b
+    then gives tailored recommendations using gpt-oss:120b
     running locally on your DGX Spark via Ollama.
 
     Request body:

@@ -88,7 +88,7 @@ services:
       # Ollama on DGX Spark host machine
       # host.docker.internal → the host machine IP from inside Docker
       OLLAMA_BASE_URL: http://host.docker.internal:11434
-      OLLAMA_MODEL:    qwen3:30b
+      OLLAMA_MODEL:    gpt-oss:120b
 
     volumes:
       # Mount source code for hot reload during development

@@ -76,7 +76,7 @@ export async function streamAdvisorResponse(
           if (payload.done === true) {
             onDone && onDone({
               tokens: payload.tokens || 0,
-              model: payload.model || 'qwen3:30b',
+              model: payload.model || 'gpt-oss:120b',
             });
             return;
           }
@@ -87,7 +87,7 @@ export async function streamAdvisorResponse(
     }
 
     // Stream ended without explicit done event
-    onDone && onDone({ tokens: 0, model: 'qwen3:30b' });
+    onDone && onDone({ tokens: 0, model: 'gpt-oss:120b' });
   } catch (err) {
     if (err.name === 'AbortError') {
       onError && onError(new Error('Request timed out. The AI advisor took too long to respond.'));

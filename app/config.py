@@ -30,7 +30,7 @@ class Settings(BaseSettings):
 
     # ── Ollama / AI ───────────────────────────────────────────────────
     OLLAMA_BASE_URL: str = "http://host.docker.internal:11434"
-    OLLAMA_MODEL:    str = "qwen3:30b"
+    OLLAMA_MODEL:    str = "gpt-oss:120b"
 
     # ── Twilio / SMS & WhatsApp ───────────────────────────────────────
     TWILIO_ACCOUNT_SID:       str = ""

@@ -254,7 +254,7 @@ export default function AdvisorView({ token, income, expenses, currency, rates }
           <div>
             <h2 style={{ color: G.text, margin: 0, fontSize: 20, fontFamily: "'Playfair Display',serif" }}>🤖 AI Financial Advisor</h2>
             <p style={{ color: G.textSoft, fontSize: 13, margin: "4px 0 0" }}>
-              Powered by <span style={{ color: G.gold }}>qwen3:30b</span> on your DGX Spark · streams in real-time
+              Powered by <span style={{ color: G.gold }}>gpt-oss:120b</span> on your DGX Spark · streams in real-time
             </p>
           </div>
           {history.length > 0 && (

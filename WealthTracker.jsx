@@ -534,7 +534,7 @@ function SummaryView({income,expenses}) {
           ))}
         </div>
         <p style={{color:G.muted,fontSize:11,marginTop:12,textAlign:"center"}}>
-          🚀 Step 5: Connect to your local qwen3:30b on DGX Spark for personalized AI advice
+          🚀 Step 5: Connect to your local gpt-oss:120b on DGX Spark for personalized AI advice
         </p>
       </Card>
     </div>
@@ -611,7 +611,7 @@ export default function WealthTracker() {
         <div style={{marginTop:16,padding:"10px 12px",background:G.goldFade,
           borderRadius:10,border:`1px solid ${G.gold}30`}}>
           <p style={{color:G.gold,fontSize:11,fontWeight:600,margin:"0 0 2px"}}>DGX Spark Ready</p>
-          <p style={{color:G.textSoft,fontSize:10}}>AI advisor powered by qwen3:30b</p>
+          <p style={{color:G.textSoft,fontSize:10}}>AI advisor powered by gpt-oss:120b</p>
         </div>
       </div>
 

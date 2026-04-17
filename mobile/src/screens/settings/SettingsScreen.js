@@ -304,7 +304,7 @@ export default function SettingsScreen() {
           <View style={styles.divider} />
           <View style={styles.appInfoRow}>
             <Text style={styles.appInfoLabel}>AI Model</Text>
-            <Text style={styles.appInfoValue}>qwen3:30b</Text>
+            <Text style={styles.appInfoValue}>gpt-oss:120b</Text>
           </View>
           <View style={styles.divider} />
           <View style={styles.appInfoRow}>

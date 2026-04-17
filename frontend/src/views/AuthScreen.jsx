@@ -219,7 +219,7 @@ export default function AuthScreen({ onAuth }) {
         </form>
 
         <p style={{ color: G.muted, fontSize: 11, textAlign: "center", marginTop: 20 }}>
-          🤖 AI advisor powered by qwen3:30b on DGX Spark
+          🤖 AI advisor powered by gpt-oss:120b on DGX Spark
         </p>
       </div>
     </div>

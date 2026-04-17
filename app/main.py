@@ -62,7 +62,7 @@ Personal finance management system with AI-powered advice.
 - 💸 **Expense tracking** — categorized, filterable
 - 📊 **Monthly summaries** — savings rate, category breakdown, trends
 - 🎯 **Wealth goals** — track progress toward financial targets
-- 🤖 **AI Financial Advisor** — powered by qwen3:30b on DGX Spark
+- 🤖 **AI Financial Advisor** — powered by gpt-oss:120b on DGX Spark
 
 ### Authentication
 All endpoints (except `/api/auth/register` and `/api/auth/login`) require

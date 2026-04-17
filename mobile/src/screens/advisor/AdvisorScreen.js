@@ -152,17 +152,23 @@ export default function AdvisorScreen() {
       {/* Header */}
       <View style={styles.header}>
         <View style={styles.headerLeft}>
-          <Text style={styles.headerEmoji}>💎</Text>
+          <View style={styles.headerIconWrap}>
+            <Text style={styles.headerEmoji}>💎</Text>
+          </View>
           <View>
             <Text style={styles.headerTitle}>AI Financial Advisor</Text>
-            <Text style={styles.headerSub}>Powered by qwen3:30b on DGX Spark</Text>
+            <Text style={styles.headerSub}>gpt-oss:120b · DGX Spark</Text>
           </View>
         </View>
-        {modelInfo && (
+        {(isStreaming || isLoading) ? (
+          <View style={[styles.modelBadge, styles.activeBadge]}>
+            <Text style={[styles.modelBadgeText, { color: G.green }]}>● Live</Text>
+          </View>
+        ) : modelInfo ? (
           <View style={styles.modelBadge}>
             <Text style={styles.modelBadgeText}>{modelInfo.model}</Text>
           </View>
-        )}
+        ) : null}
       </View>
 
       <ScrollView
@@ -296,8 +302,18 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 10,
   },
+  headerIconWrap: {
+    width: 42,
+    height: 42,
+    borderRadius: 13,
+    backgroundColor: G.goldFade,
+    borderWidth: 1,
+    borderColor: 'rgba(201,168,76,0.25)',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   headerEmoji: {
-    fontSize: 28,
+    fontSize: 22,
   },
   headerTitle: {
     fontSize: 18,
@@ -316,6 +332,10 @@ const styles = StyleSheet.create({
     paddingVertical: 4,
     borderWidth: 1,
     borderColor: G.gold,
+  },
+  activeBadge: {
+    backgroundColor: 'rgba(34,197,94,0.1)',
+    borderColor: G.green,
   },
   modelBadgeText: {
     fontSize: 11,

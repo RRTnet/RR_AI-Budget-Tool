@@ -1,7 +1,7 @@
 """
 app/routers/ai_advisor.py
 ──────────────────────────
-The AI Financial Advisor — powered by your local qwen3:30b on DGX Spark.
+The AI Financial Advisor — powered by your local gpt-oss:120b on DGX Spark.
 
 Endpoints:
   POST /api/advisor         →  Blocking response (waits for full reply)
@@ -10,7 +10,7 @@ Endpoints:
 How it works:
 1. Fetch the user's current month summary from the DB
 2. Build a rich system prompt with their actual financial data
-3. Send to Ollama (qwen3:30b running locally on DGX Spark)
+3. Send to Ollama (gpt-oss:120b running locally on DGX Spark)
 4. Stream or return intelligent, personalised financial advice
 """
 import json
@@ -162,7 +162,7 @@ async def get_advice_stream(
     The client receives a stream of newline-delimited events:
       data: {"token": "Hello"}
       data: {"token": " there"}
-      data: {"done": true, "tokens": 312, "model": "qwen3:30b"}
+      data: {"done": true, "tokens": 312, "model": "gpt-oss:120b"}
 
     On error:
       data: {"error": "message"}
@@ -183,7 +183,7 @@ async def get_advice_stream(
     request_body = _build_ollama_body(system_prompt, user_question, stream=True)
 
     async def token_generator():
-        # Strip <think>…</think> blocks emitted by qwen3's chain-of-thought.
+        # Strip <think>…</think> blocks (chain-of-thought filtering).
         # Tokens arrive one or a few chars at a time, so we buffer and scan.
         in_think  = False
         think_buf = ""

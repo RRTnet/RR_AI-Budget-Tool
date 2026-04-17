@@ -7,7 +7,6 @@ import {
   StyleSheet,
   KeyboardAvoidingView,
   Platform,
-  Alert,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -61,12 +60,9 @@ export default function LoginScreen({ navigation }) {
     setLoading(true);
     try {
       await login(email.trim().toLowerCase(), password);
-      // Store token securely for biometric login
       if (biometricAvailable) {
         const tkn = await getToken();
-        if (tkn) {
-          await SecureStore.setItemAsync(SECURE_TOKEN_KEY, tkn);
-        }
+        if (tkn) await SecureStore.setItemAsync(SECURE_TOKEN_KEY, tkn);
       }
       await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
     } catch (e) {
@@ -86,7 +82,6 @@ export default function LoginScreen({ navigation }) {
           setError('No stored credentials. Please sign in with your password first.');
           return;
         }
-        // Validate token is still valid
         await getMeApi(secureToken);
         await setToken(secureToken);
         await loadUser(secureToken);
@@ -104,14 +99,20 @@ export default function LoginScreen({ navigation }) {
       style={[styles.flex, { paddingTop: insets.top, paddingBottom: insets.bottom }]}
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
     >
+      {/* Decorative background glow */}
+      <View style={styles.glowTop} pointerEvents="none" />
+      <View style={styles.glowBottom} pointerEvents="none" />
+
       <ScrollView
         contentContainerStyle={styles.container}
         keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={false}
       >
-        {/* Logo */}
+        {/* Logo section */}
         <View style={styles.logoSection}>
-          <Text style={styles.logoEmoji}>💰</Text>
+          <View style={styles.logoBadge}>
+            <Text style={styles.logoEmoji}>💰</Text>
+          </View>
           <Text style={styles.logoTitle}>Rolling Revenue</Text>
           <Text style={styles.logoSubtitle}>Your Money Tool</Text>
         </View>
@@ -119,26 +120,31 @@ export default function LoginScreen({ navigation }) {
         {/* Error */}
         {error ? <ErrorBanner message={error} onDismiss={() => setError('')} /> : null}
 
-        {/* Form */}
-        <View style={styles.form}>
-          <InputField
-            label="Email"
-            value={email}
-            onChangeText={setEmail}
-            placeholder="you@example.com"
-            keyboardType="email-address"
-            autoCapitalize="none"
-            returnKeyType="next"
-          />
-          <InputField
-            label="Password"
-            value={password}
-            onChangeText={setPassword}
-            placeholder="Your password"
-            secureTextEntry
-            returnKeyType="done"
-            onSubmitEditing={handleLogin}
-          />
+        {/* Form card */}
+        <View style={styles.formCard}>
+          <Text style={styles.formHeading}>Welcome back</Text>
+          <Text style={styles.formSubheading}>Sign in to your account</Text>
+
+          <View style={styles.fieldGap}>
+            <InputField
+              label="Email"
+              value={email}
+              onChangeText={setEmail}
+              placeholder="you@example.com"
+              keyboardType="email-address"
+              autoCapitalize="none"
+              returnKeyType="next"
+            />
+            <InputField
+              label="Password"
+              value={password}
+              onChangeText={setPassword}
+              placeholder="Your password"
+              secureTextEntry
+              returnKeyType="done"
+              onSubmitEditing={handleLogin}
+            />
+          </View>
 
           <GoldButton
             title="Sign In"
@@ -148,38 +154,44 @@ export default function LoginScreen({ navigation }) {
             style={styles.signInBtn}
           />
 
-          {/* Biometric Login */}
           {biometricAvailable && biometricEnabled && (
             <TouchableOpacity
               style={styles.biometricBtn}
               onPress={handleBiometricLogin}
               activeOpacity={0.7}
             >
-              <Feather
-                name={biometricType === 'Face ID' ? 'eye' : 'airplay'}
-                size={20}
-                color={G.gold}
-                style={styles.biometricIcon}
-              />
-              <Text style={styles.biometricText}>
-                Sign in with {biometricType}
-              </Text>
+              <View style={styles.biometricIconWrap}>
+                <Feather
+                  name={biometricType === 'Face ID' ? 'eye' : 'airplay'}
+                  size={18}
+                  color={G.gold}
+                />
+              </View>
+              <Text style={styles.biometricText}>Sign in with {biometricType}</Text>
+              <Feather name="chevron-right" size={16} color={G.muted} />
             </TouchableOpacity>
           )}
 
-          {/* Register link */}
-          <View style={styles.registerRow}>
-            <Text style={styles.registerText}>Don't have an account? </Text>
-            <TouchableOpacity onPress={() => navigation.navigate('Register')}>
-              <Text style={styles.registerLink}>Create Account</Text>
-            </TouchableOpacity>
+          <View style={styles.dividerRow}>
+            <View style={styles.dividerLine} />
+            <Text style={styles.dividerText}>New here?</Text>
+            <View style={styles.dividerLine} />
           </View>
+
+          <TouchableOpacity
+            style={styles.registerBtn}
+            onPress={() => navigation.navigate('Register')}
+            activeOpacity={0.8}
+          >
+            <Text style={styles.registerBtnText}>Create Account</Text>
+          </TouchableOpacity>
         </View>
 
         {/* Footer */}
-        <Text style={styles.footer}>
-          AI advisor powered by qwen3:30b on DGX Spark
-        </Text>
+        <View style={styles.footerRow}>
+          <View style={styles.footerDot} />
+          <Text style={styles.footer}>AI advisor · gpt-oss:120b · DGX Spark</Text>
+        </View>
       </ScrollView>
     </KeyboardAvoidingView>
   );
@@ -190,78 +202,182 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: G.bg,
   },
+  glowTop: {
+    position: 'absolute',
+    top: -60,
+    left: '50%',
+    marginLeft: -120,
+    width: 240,
+    height: 240,
+    borderRadius: 120,
+    backgroundColor: 'rgba(201,168,76,0.06)',
+  },
+  glowBottom: {
+    position: 'absolute',
+    bottom: 40,
+    right: -80,
+    width: 200,
+    height: 200,
+    borderRadius: 100,
+    backgroundColor: 'rgba(59,130,246,0.04)',
+  },
   container: {
     flexGrow: 1,
-    paddingHorizontal: 24,
-    paddingVertical: 20,
+    paddingHorizontal: 20,
+    paddingVertical: 24,
     justifyContent: 'center',
   },
+
+  // Logo
   logoSection: {
     alignItems: 'center',
-    marginBottom: 40,
+    marginBottom: 32,
+  },
+  logoBadge: {
+    width: 72,
+    height: 72,
+    borderRadius: 22,
+    backgroundColor: G.card,
+    borderWidth: 1,
+    borderColor: 'rgba(201,168,76,0.2)',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 14,
+    shadowColor: G.gold,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.15,
+    shadowRadius: 12,
+    elevation: 6,
   },
   logoEmoji: {
-    fontSize: 56,
-    marginBottom: 12,
+    fontSize: 36,
   },
   logoTitle: {
-    fontSize: 32,
-    fontWeight: '700',
+    fontSize: 28,
+    fontWeight: '800',
     color: G.gold,
-    letterSpacing: 0.5,
-    marginBottom: 6,
+    letterSpacing: 0.3,
+    marginBottom: 4,
   },
   logoSubtitle: {
-    fontSize: 14,
+    fontSize: 13,
     color: G.textSoft,
-    letterSpacing: 0.3,
+    letterSpacing: 0.5,
+    textTransform: 'uppercase',
   },
-  form: {
-    width: '100%',
+
+  // Form card
+  formCard: {
+    backgroundColor: G.card,
+    borderRadius: 20,
+    borderWidth: 1,
+    borderColor: G.border,
+    padding: 24,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.3,
+    shadowRadius: 20,
+    elevation: 8,
+  },
+  formHeading: {
+    fontSize: 20,
+    fontWeight: '700',
+    color: G.text,
+    marginBottom: 4,
+  },
+  formSubheading: {
+    fontSize: 13,
+    color: G.textSoft,
+    marginBottom: 20,
+  },
+  fieldGap: {
+    gap: 4,
   },
   signInBtn: {
-    marginTop: 8,
-    marginBottom: 16,
+    marginTop: 20,
+    marginBottom: 12,
   },
+
+  // Biometric
   biometricBtn: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
     borderWidth: 1,
-    borderColor: G.gold,
+    borderColor: 'rgba(201,168,76,0.25)',
     borderRadius: 12,
-    paddingVertical: 13,
-    marginBottom: 20,
+    paddingVertical: 12,
+    paddingHorizontal: 14,
     backgroundColor: G.goldFade,
+    marginBottom: 4,
   },
-  biometricIcon: {
-    marginRight: 8,
+  biometricIconWrap: {
+    width: 30,
+    height: 30,
+    borderRadius: 8,
+    backgroundColor: 'rgba(201,168,76,0.1)',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: 10,
   },
   biometricText: {
-    color: G.gold,
+    flex: 1,
+    color: G.goldSoft,
     fontSize: 14,
     fontWeight: '600',
   },
-  registerRow: {
+
+  // Divider
+  dividerRow: {
     flexDirection: 'row',
-    justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 4,
+    marginVertical: 16,
+    gap: 10,
   },
-  registerText: {
-    color: G.textSoft,
-    fontSize: 14,
+  dividerLine: {
+    flex: 1,
+    height: 1,
+    backgroundColor: G.border,
   },
-  registerLink: {
-    color: G.gold,
+  dividerText: {
+    fontSize: 12,
+    color: G.muted,
+    fontWeight: '500',
+  },
+
+  // Register
+  registerBtn: {
+    borderWidth: 1,
+    borderColor: G.border,
+    borderRadius: 12,
+    paddingVertical: 13,
+    alignItems: 'center',
+    backgroundColor: G.surface,
+  },
+  registerBtnText: {
+    color: G.text,
     fontSize: 14,
     fontWeight: '600',
+  },
+
+  // Footer
+  footerRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 28,
+    gap: 6,
+  },
+  footerDot: {
+    width: 5,
+    height: 5,
+    borderRadius: 3,
+    backgroundColor: G.gold,
+    opacity: 0.5,
   },
   footer: {
     textAlign: 'center',
     color: G.muted,
     fontSize: 11,
-    marginTop: 40,
-    letterSpacing: 0.2,
+    letterSpacing: 0.3,
   },
 });

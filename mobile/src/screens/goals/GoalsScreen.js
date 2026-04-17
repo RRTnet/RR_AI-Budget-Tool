@@ -118,8 +118,17 @@ export default function GoalsScreen({ navigation }) {
     <View style={[styles.flex, { paddingTop: insets.top }]}>
       {/* Header */}
       <View style={styles.header}>
-        <Text style={styles.title}>Goals</Text>
-        <Text style={styles.count}>{goals.length} goals</Text>
+        <View>
+          <Text style={styles.title}>Goals</Text>
+          <Text style={styles.subtitle}>{goals.length} goals</Text>
+        </View>
+        {goals.length > 0 && (
+          <View style={styles.headerRight}>
+            <Text style={styles.completedLabel}>
+              {goals.filter((g) => g.target > 0 && (g.saved || 0) >= g.target).length} reached
+            </Text>
+          </View>
+        )}
       </View>
 
       {error ? <ErrorBanner message={error} onDismiss={() => setError('')} /> : null}
@@ -134,7 +143,9 @@ export default function GoalsScreen({ navigation }) {
       >
         {goals.length === 0 ? (
           <View style={styles.emptyState}>
-            <Text style={styles.emptyEmoji}>🎯</Text>
+            <View style={styles.emptyIconWrap}>
+              <Text style={styles.emptyEmoji}>🎯</Text>
+            </View>
             <Text style={styles.emptyTitle}>No goals yet</Text>
             <Text style={styles.emptyText}>
               Tap + to set your first financial goal
@@ -146,69 +157,83 @@ export default function GoalsScreen({ navigation }) {
             const isReached = pct >= 100;
             const goalColor = goal.color || G.gold;
             const isDeleting = deletingId === goal.id;
+            const remaining = Math.max(0, goal.target - (goal.saved || 0));
 
             return (
-              <Card key={goal.id} style={[styles.goalCard, isDeleting && styles.goalDeleting]}>
-                {/* Goal header */}
-                <View style={styles.goalHeader}>
-                  <View style={[styles.goalDot, { backgroundColor: goalColor }]} />
-                  <Text style={styles.goalName} numberOfLines={2}>{goal.name}</Text>
-                  {isReached && (
-                    <View style={styles.reachedBadge}>
-                      <Text style={styles.reachedText}>🏆 Reached!</Text>
+              <View key={goal.id} style={[styles.goalCard, isDeleting && styles.goalDeleting]}>
+                {/* Colored top accent bar */}
+                <View style={[styles.goalTopBar, { backgroundColor: goalColor }]} />
+
+                <View style={styles.goalCardInner}>
+                  {/* Goal header */}
+                  <View style={styles.goalHeader}>
+                    <View style={[styles.goalIconWrap, { backgroundColor: `${goalColor}18` }]}>
+                      <Text style={styles.goalIcon}>🎯</Text>
                     </View>
+                    <View style={styles.goalTitleWrap}>
+                      <Text style={styles.goalName} numberOfLines={1}>{goal.name}</Text>
+                      {isReached ? (
+                        <View style={styles.reachedBadge}>
+                          <Text style={styles.reachedText}>🏆 Goal Reached!</Text>
+                        </View>
+                      ) : (
+                        <Text style={styles.goalRemaining}>
+                          {formatCurrency(remaining, currency)} to go
+                        </Text>
+                      )}
+                    </View>
+                    <TouchableOpacity
+                      onPress={() => handleDelete(goal)}
+                      hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+                      style={styles.deleteBtn}
+                    >
+                      <Feather name="trash-2" size={15} color={G.muted} />
+                    </TouchableOpacity>
+                  </View>
+
+                  {/* Progress bar + pct */}
+                  <View style={styles.progressRow}>
+                    <ProgressBar pct={pct} color={goalColor} height={8} style={styles.progressBar} />
+                    <Text style={[styles.pctBadge, { color: goalColor }]}>{Math.round(pct)}%</Text>
+                  </View>
+
+                  {/* Amounts row */}
+                  <View style={styles.amountsRow}>
+                    <View style={styles.amountCol}>
+                      <Text style={styles.amountLabel}>Saved</Text>
+                      <Text style={[styles.amountValue, { color: goalColor }]}>
+                        {formatCurrency(goal.saved || 0, currency)}
+                      </Text>
+                    </View>
+                    <View style={styles.amountsDivider} />
+                    <View style={styles.amountCol}>
+                      <Text style={styles.amountLabel}>Target</Text>
+                      <Text style={styles.amountValueNeutral}>
+                        {formatCurrency(goal.target, currency)}
+                      </Text>
+                    </View>
+                    <View style={styles.amountsDivider} />
+                    <View style={styles.amountCol}>
+                      <Text style={styles.amountLabel}>Remaining</Text>
+                      <Text style={styles.amountValueMuted}>
+                        {formatCurrency(remaining, currency)}
+                      </Text>
+                    </View>
+                  </View>
+
+                  {/* Add Savings button */}
+                  {!isReached && (
+                    <TouchableOpacity
+                      style={[styles.addSavingsBtn, { borderColor: `${goalColor}40`, backgroundColor: `${goalColor}10` }]}
+                      onPress={() => handleAddSavings(goal)}
+                      activeOpacity={0.7}
+                    >
+                      <Feather name="plus-circle" size={15} color={goalColor} style={styles.addSavingsIcon} />
+                      <Text style={[styles.addSavingsText, { color: goalColor }]}>Add Savings</Text>
+                    </TouchableOpacity>
                   )}
-                  <TouchableOpacity
-                    onPress={() => handleDelete(goal)}
-                    hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
-                    style={styles.deleteBtn}
-                  >
-                    <Feather name="trash-2" size={15} color={G.muted} />
-                  </TouchableOpacity>
                 </View>
-
-                {/* Amounts */}
-                <View style={styles.amountsRow}>
-                  <View>
-                    <Text style={styles.savedLabel}>Saved</Text>
-                    <Text style={[styles.savedValue, { color: goalColor }]}>
-                      {formatCurrency(goal.saved || 0, currency)}
-                    </Text>
-                  </View>
-                  <View style={styles.amountsDivider} />
-                  <View style={styles.targetCol}>
-                    <Text style={styles.savedLabel}>Target</Text>
-                    <Text style={styles.targetValue}>
-                      {formatCurrency(goal.target, currency)}
-                    </Text>
-                  </View>
-                  <View style={styles.amountsDivider} />
-                  <View style={styles.targetCol}>
-                    <Text style={styles.savedLabel}>Remaining</Text>
-                    <Text style={styles.remainingValue}>
-                      {formatCurrency(Math.max(0, goal.target - (goal.saved || 0)), currency)}
-                    </Text>
-                  </View>
-                </View>
-
-                {/* Progress */}
-                <ProgressBar pct={pct} color={goalColor} height={10} style={styles.progressBar} />
-                <Text style={styles.pctText}>{pct.toFixed(1)}% complete</Text>
-
-                {/* Add Savings button */}
-                {!isReached && (
-                  <TouchableOpacity
-                    style={[styles.addSavingsBtn, { borderColor: goalColor }]}
-                    onPress={() => handleAddSavings(goal)}
-                    activeOpacity={0.7}
-                  >
-                    <Feather name="plus-circle" size={16} color={goalColor} style={styles.addSavingsIcon} />
-                    <Text style={[styles.addSavingsText, { color: goalColor }]}>
-                      Add Savings
-                    </Text>
-                  </TouchableOpacity>
-                )}
-              </Card>
+              </View>
             );
           })
         )}
@@ -280,52 +305,93 @@ const styles = StyleSheet.create({
   },
   header: {
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'flex-end',
     justifyContent: 'space-between',
-    paddingHorizontal: 16,
-    paddingVertical: 16,
+    paddingHorizontal: 20,
+    paddingTop: 16,
+    paddingBottom: 12,
   },
   title: {
-    fontSize: 24,
-    fontWeight: '700',
+    fontSize: 26,
+    fontWeight: '800',
     color: G.text,
+    letterSpacing: 0.2,
   },
-  count: {
+  subtitle: {
     fontSize: 13,
     color: G.textSoft,
+    marginTop: 2,
+  },
+  headerRight: {
+    alignItems: 'flex-end',
+  },
+  completedLabel: {
+    fontSize: 13,
+    color: G.gold,
+    fontWeight: '600',
   },
   container: {
     paddingHorizontal: 16,
   },
   goalCard: {
+    backgroundColor: G.card,
+    borderRadius: 16,
+    borderWidth: 1,
+    borderColor: G.border,
     marginBottom: 14,
+    overflow: 'hidden',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 8,
+    elevation: 4,
   },
   goalDeleting: {
-    opacity: 0.5,
+    opacity: 0.4,
+  },
+  goalTopBar: {
+    height: 3,
+    width: '100%',
+  },
+  goalCardInner: {
+    padding: 16,
   },
   goalHeader: {
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 14,
-    gap: 8,
+    gap: 10,
   },
-  goalDot: {
-    width: 12,
-    height: 12,
-    borderRadius: 6,
+  goalIconWrap: {
+    width: 38,
+    height: 38,
+    borderRadius: 11,
+    alignItems: 'center',
+    justifyContent: 'center',
     flexShrink: 0,
   },
-  goalName: {
+  goalIcon: {
+    fontSize: 18,
+  },
+  goalTitleWrap: {
     flex: 1,
+  },
+  goalName: {
     fontSize: 16,
     fontWeight: '700',
     color: G.text,
+    marginBottom: 3,
+  },
+  goalRemaining: {
+    fontSize: 12,
+    color: G.textSoft,
   },
   reachedBadge: {
+    alignSelf: 'flex-start',
     backgroundColor: G.goldFade,
-    borderRadius: 10,
-    paddingHorizontal: 8,
-    paddingVertical: 3,
+    borderRadius: 8,
+    paddingHorizontal: 7,
+    paddingVertical: 2,
     borderWidth: 1,
     borderColor: G.gold,
   },
@@ -337,47 +403,56 @@ const styles = StyleSheet.create({
   deleteBtn: {
     padding: 4,
   },
+  progressRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 14,
+    gap: 10,
+  },
+  progressBar: {
+    flex: 1,
+  },
+  pctBadge: {
+    fontSize: 12,
+    fontWeight: '700',
+    width: 38,
+    textAlign: 'right',
+  },
   amountsRow: {
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 14,
   },
-  savedLabel: {
-    fontSize: 11,
-    color: G.textSoft,
+  amountCol: {
+    flex: 1,
+  },
+  amountLabel: {
+    fontSize: 10,
+    color: G.muted,
     textTransform: 'uppercase',
     letterSpacing: 0.5,
     marginBottom: 3,
     fontWeight: '600',
   },
-  savedValue: {
-    fontSize: 17,
+  amountValue: {
+    fontSize: 15,
     fontWeight: '700',
   },
-  amountsDivider: {
-    width: 1,
-    height: 36,
-    backgroundColor: G.border,
-    marginHorizontal: 14,
-  },
-  targetCol: {},
-  targetValue: {
+  amountValueNeutral: {
     fontSize: 15,
     fontWeight: '600',
     color: G.text,
   },
-  remainingValue: {
+  amountValueMuted: {
     fontSize: 15,
     fontWeight: '600',
     color: G.textSoft,
   },
-  progressBar: {
-    marginBottom: 6,
-  },
-  pctText: {
-    fontSize: 12,
-    color: G.textSoft,
-    marginBottom: 14,
+  amountsDivider: {
+    width: 1,
+    height: 30,
+    backgroundColor: G.border,
+    marginHorizontal: 12,
   },
   addSavingsBtn: {
     flexDirection: 'row',
@@ -386,7 +461,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 10,
     paddingVertical: 10,
-    backgroundColor: 'transparent',
   },
   addSavingsIcon: {
     marginRight: 6,
@@ -399,9 +473,19 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 80,
   },
-  emptyEmoji: {
-    fontSize: 48,
+  emptyIconWrap: {
+    width: 72,
+    height: 72,
+    borderRadius: 20,
+    backgroundColor: G.card,
+    borderWidth: 1,
+    borderColor: G.border,
+    alignItems: 'center',
+    justifyContent: 'center',
     marginBottom: 16,
+  },
+  emptyEmoji: {
+    fontSize: 34,
   },
   emptyTitle: {
     fontSize: 18,

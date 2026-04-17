@@ -84,21 +84,26 @@ export default function RegisterScreen({ navigation }) {
       style={[styles.flex, { paddingTop: insets.top, paddingBottom: insets.bottom }]}
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
     >
+      {/* Decorative background glow */}
+      <View style={styles.glowTop} pointerEvents="none" />
+
       <ScrollView
         contentContainerStyle={styles.container}
         keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={false}
       >
-        {/* Header */}
-        <View style={styles.header}>
-          <Text style={styles.logo}>💎</Text>
+        {/* Logo */}
+        <View style={styles.logoSection}>
+          <View style={styles.logoBadge}>
+            <Text style={styles.logoEmoji}>💎</Text>
+          </View>
           <Text style={styles.title}>Create Account</Text>
           <Text style={styles.subtitle}>Start tracking your wealth today</Text>
         </View>
 
         {error ? <ErrorBanner message={error} onDismiss={() => setError('')} /> : null}
 
-        <View style={styles.form}>
+        <View style={styles.formCard}>
           <InputField
             label="Full Name"
             value={name}
@@ -196,12 +201,19 @@ export default function RegisterScreen({ navigation }) {
             style={styles.submitBtn}
           />
 
-          <View style={styles.loginRow}>
-            <Text style={styles.loginText}>Already have an account? </Text>
-            <TouchableOpacity onPress={() => navigation.navigate('Login')}>
-              <Text style={styles.loginLink}>Sign In</Text>
-            </TouchableOpacity>
+          <View style={styles.dividerRow}>
+            <View style={styles.dividerLine} />
+            <Text style={styles.dividerText}>Have an account?</Text>
+            <View style={styles.dividerLine} />
           </View>
+
+          <TouchableOpacity
+            style={styles.loginBtn}
+            onPress={() => navigation.navigate('Login')}
+            activeOpacity={0.8}
+          >
+            <Text style={styles.loginBtnText}>Sign In Instead</Text>
+          </TouchableOpacity>
         </View>
       </ScrollView>
     </KeyboardAvoidingView>
@@ -213,32 +225,69 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: G.bg,
   },
+  glowTop: {
+    position: 'absolute',
+    top: -40,
+    left: '50%',
+    marginLeft: -100,
+    width: 200,
+    height: 200,
+    borderRadius: 100,
+    backgroundColor: 'rgba(201,168,76,0.05)',
+  },
   container: {
     flexGrow: 1,
-    paddingHorizontal: 24,
+    paddingHorizontal: 20,
     paddingVertical: 20,
   },
-  header: {
+  logoSection: {
     alignItems: 'center',
-    marginBottom: 32,
-    paddingTop: 20,
+    marginBottom: 24,
+    paddingTop: 8,
   },
-  logo: {
-    fontSize: 44,
-    marginBottom: 10,
+  logoBadge: {
+    width: 64,
+    height: 64,
+    borderRadius: 20,
+    backgroundColor: G.card,
+    borderWidth: 1,
+    borderColor: 'rgba(201,168,76,0.2)',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 12,
+    shadowColor: G.gold,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.12,
+    shadowRadius: 10,
+    elevation: 5,
+  },
+  logoEmoji: {
+    fontSize: 30,
   },
   title: {
     fontSize: 26,
-    fontWeight: '700',
+    fontWeight: '800',
     color: G.gold,
-    marginBottom: 6,
+    marginBottom: 4,
+    letterSpacing: 0.3,
   },
   subtitle: {
-    fontSize: 14,
+    fontSize: 13,
     color: G.textSoft,
+    letterSpacing: 0.3,
   },
-  form: {
-    width: '100%',
+  formCard: {
+    backgroundColor: G.card,
+    borderRadius: 20,
+    borderWidth: 1,
+    borderColor: G.border,
+    padding: 20,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.25,
+    shadowRadius: 18,
+    elevation: 7,
+    marginBottom: 20,
   },
   sectionLabel: {
     fontSize: 12,
@@ -320,20 +369,34 @@ const styles = StyleSheet.create({
   },
   submitBtn: {
     marginTop: 8,
-    marginBottom: 20,
+    marginBottom: 0,
   },
-  loginRow: {
+  dividerRow: {
     flexDirection: 'row',
-    justifyContent: 'center',
     alignItems: 'center',
-    paddingBottom: 20,
+    marginVertical: 16,
+    gap: 10,
   },
-  loginText: {
-    color: G.textSoft,
-    fontSize: 14,
+  dividerLine: {
+    flex: 1,
+    height: 1,
+    backgroundColor: G.border,
   },
-  loginLink: {
-    color: G.gold,
+  dividerText: {
+    fontSize: 12,
+    color: G.muted,
+    fontWeight: '500',
+  },
+  loginBtn: {
+    borderWidth: 1,
+    borderColor: G.border,
+    borderRadius: 12,
+    paddingVertical: 13,
+    alignItems: 'center',
+    backgroundColor: G.surface,
+  },
+  loginBtnText: {
+    color: G.text,
     fontSize: 14,
     fontWeight: '600',
   },
