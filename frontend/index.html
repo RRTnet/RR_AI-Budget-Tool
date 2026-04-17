@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>Rolling Revenue — Your Money Tool</title>
+    <meta name="description" content="Rolling Revenue — your all-in-one money tool with AI advisor, multi-currency tracking, and wealth goals" />
+
+    <!-- PWA / Mobile -->
+    <meta name="theme-color" content="#c9a84c" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Rolling Revenue" />
+
+    <!-- Icons -->
+    <link rel="icon" type="image/svg+xml" href="/icons/icon.svg" />
+    <link rel="apple-touch-icon" href="/icons/icon.svg" />
+    <link rel="mask-icon" href="/icons/icon.svg" color="#c9a84c" />
+
+    <style>
+      *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+      body { background: #0a0c10; }
+      #root { min-height: 100vh; min-height: 100dvh; }
+    </style>
+    <!-- Unregister stale dev-mode service workers from Vite dev server -->
+    <script>
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.getRegistrations().then(function(regs) {
+          regs.forEach(function(reg) {
+            var url = (reg.active || reg.installing || reg.waiting || {}).scriptURL || '';
+            if (url.includes('dev-sw')) { reg.unregister(); }
+          });
+        });
+      }
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>

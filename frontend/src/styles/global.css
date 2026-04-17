@@ -1,0 +1,283 @@
+/* ── Rolling Revenue — Global Styles ─────────────────────────────── */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap');
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --bg:       #0a0c10;
+  --surface:  #111318;
+  --card:     #161a22;
+  --border:   #1e2430;
+  --gold:     #c9a84c;
+  --gold-soft:#e8c97a;
+  --gold-fade:rgba(201,168,76,0.12);
+  --green:    #22c55e;
+  --red:      #ef4444;
+  --blue:     #3b82f6;
+  --muted:    #4a5568;
+  --text:     #e2e8f0;
+  --text-soft:#94a3b8;
+  --radius:   16px;
+  --radius-sm:10px;
+  --transition: 0.18s ease;
+}
+
+html, body, #root {
+  height: 100%;
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ── Scrollbars ───────────────────────────────────────────────────── */
+::-webkit-scrollbar        { width: 5px; height: 5px; }
+::-webkit-scrollbar-track  { background: var(--bg); }
+::-webkit-scrollbar-thumb  { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--muted); }
+
+/* ── Form elements ────────────────────────────────────────────────── */
+input, select, textarea {
+  color-scheme: dark;
+  font-family: 'DM Sans', sans-serif;
+}
+input::placeholder, textarea::placeholder { color: var(--muted); }
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  border-color: rgba(201,168,76,0.5) !important;
+  box-shadow: 0 0 0 3px rgba(201,168,76,0.08);
+  transition: border-color var(--transition), box-shadow var(--transition);
+}
+
+/* ── Card component ───────────────────────────────────────────────── */
+.rr-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  transition: border-color var(--transition), box-shadow var(--transition), transform var(--transition);
+}
+.rr-card:hover {
+  border-color: rgba(201,168,76,0.2);
+  box-shadow: 0 4px 24px rgba(0,0,0,0.3);
+}
+.rr-card-interactive {
+  cursor: pointer;
+}
+.rr-card-interactive:hover {
+  transform: translateY(-1px);
+  border-color: rgba(201,168,76,0.35);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+}
+.rr-card-interactive:active {
+  transform: translateY(0);
+}
+
+/* ── Nav button ───────────────────────────────────────────────────── */
+.rr-nav-btn {
+  transition: background var(--transition), color var(--transition), border-color var(--transition);
+}
+.rr-nav-btn:hover:not(.active) {
+  background: rgba(201,168,76,0.05) !important;
+  color: var(--text) !important;
+}
+
+/* ── Gold button ──────────────────────────────────────────────────── */
+.rr-btn-gold {
+  transition: background var(--transition), box-shadow var(--transition), transform var(--transition);
+}
+.rr-btn-gold:hover:not(:disabled) {
+  background: var(--gold-soft) !important;
+  box-shadow: 0 4px 16px rgba(201,168,76,0.35);
+  transform: translateY(-1px);
+}
+.rr-btn-gold:active:not(:disabled) {
+  transform: translateY(0);
+  box-shadow: none;
+}
+
+/* ── Danger button ────────────────────────────────────────────────── */
+.rr-btn-danger {
+  transition: background var(--transition), box-shadow var(--transition), transform var(--transition);
+}
+.rr-btn-danger:hover:not(:disabled) {
+  filter: brightness(1.1);
+  box-shadow: 0 4px 16px rgba(239,68,68,0.25);
+  transform: translateY(-1px);
+}
+
+/* ── Muted / ghost buttons ────────────────────────────────────────── */
+.rr-btn-ghost {
+  transition: background var(--transition), color var(--transition), border-color var(--transition);
+}
+.rr-btn-ghost:hover {
+  background: rgba(255,255,255,0.04) !important;
+  border-color: var(--muted) !important;
+  color: var(--text-soft) !important;
+}
+
+/* ── Filter/chip buttons ──────────────────────────────────────────── */
+.rr-chip {
+  transition: background var(--transition), border-color var(--transition), color var(--transition);
+}
+.rr-chip:hover:not(.active) {
+  background: rgba(201,168,76,0.06) !important;
+  border-color: rgba(201,168,76,0.3) !important;
+  color: var(--gold-soft) !important;
+}
+
+/* ── Transaction row ──────────────────────────────────────────────── */
+.rr-row {
+  transition: background var(--transition), border-color var(--transition), transform var(--transition);
+}
+.rr-row:hover {
+  background: #1a1f29 !important;
+  border-color: rgba(201,168,76,0.15) !important;
+  transform: translateX(2px);
+}
+
+/* ── Delete / close button ────────────────────────────────────────── */
+.rr-delete-btn {
+  transition: color var(--transition), background var(--transition);
+  border-radius: 6px;
+}
+.rr-delete-btn:hover {
+  color: #ef4444 !important;
+  background: rgba(239,68,68,0.1) !important;
+}
+
+/* ── Prompt buttons (AI advisor) ──────────────────────────────────── */
+.rr-prompt-btn {
+  transition: background var(--transition), border-color var(--transition), color var(--transition);
+}
+.rr-prompt-btn:hover:not(:disabled) {
+  background: rgba(201,168,76,0.08) !important;
+  border-color: rgba(201,168,76,0.3) !important;
+  color: var(--gold-soft) !important;
+}
+
+/* ── Copy button ──────────────────────────────────────────────────── */
+.rr-copy-btn {
+  transition: background var(--transition), border-color var(--transition), color var(--transition);
+}
+.rr-copy-btn:hover {
+  background: rgba(255,255,255,0.06) !important;
+  border-color: var(--text-soft) !important;
+}
+
+/* ── KPI stat card ────────────────────────────────────────────────── */
+.rr-kpi-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 20px;
+  transition: border-color var(--transition), box-shadow var(--transition), transform var(--transition);
+}
+.rr-kpi-card:hover {
+  border-color: rgba(201,168,76,0.25);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+  transform: translateY(-2px);
+}
+
+/* ── Sidebar logo ─────────────────────────────────────────────────── */
+.rr-logo-text {
+  background: linear-gradient(135deg, var(--gold) 0%, var(--gold-soft) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ── Animations ───────────────────────────────────────────────────── */
+@keyframes spin    { to { transform: rotate(360deg); } }
+@keyframes blink   { 0%,100%{opacity:1} 50%{opacity:0} }
+@keyframes pulse   { 0%,100%{opacity:1} 50%{opacity:0.4} }
+@keyframes fadeIn  { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:translateY(0); } }
+@keyframes slideIn { from { opacity:0; transform:translateX(-8px); } to { opacity:1; transform:translateX(0); } }
+@keyframes shimmer { 0%{background-position:-200% 0} 100%{background-position:200% 0} }
+
+.rr-fade-in  { animation: fadeIn  0.25s ease forwards; }
+.rr-slide-in { animation: slideIn 0.2s ease forwards; }
+
+/* ── Skeleton loader ──────────────────────────────────────────────── */
+.rr-skeleton {
+  background: linear-gradient(90deg, var(--card) 25%, #1d2230 50%, var(--card) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.4s infinite;
+  border-radius: 8px;
+}
+
+/* ── Progress bar glow ────────────────────────────────────────────── */
+.rr-progress-bar {
+  transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ── Badge / pill ─────────────────────────────────────────────────── */
+.rr-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 8px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+.rr-badge-gold  { background: var(--gold-fade); color: var(--gold); border: 1px solid rgba(201,168,76,0.3); }
+.rr-badge-green { background: rgba(34,197,94,0.12); color: #22c55e; border: 1px solid rgba(34,197,94,0.3); }
+.rr-badge-red   { background: rgba(239,68,68,0.12); color: #ef4444; border: 1px solid rgba(239,68,68,0.3); }
+
+/* ── Responsive layout ────────────────────────────────────────────── */
+@media (max-width: 900px) {
+  .rr-sidebar { display: none !important; }
+  .rr-main    { padding: 16px !important; }
+  .rr-grid-2  { grid-template-columns: 1fr !important; }
+  .rr-grid-3  { grid-template-columns: 1fr 1fr !important; }
+  .rr-hero-stats { flex-direction: column !important; gap: 12px !important; }
+}
+@media (max-width: 600px) {
+  .rr-grid-3     { grid-template-columns: 1fr !important; }
+  .rr-hide-mobile { display: none !important; }
+}
+
+/* ── Scrollable horizontal filter strip ──────────────────────────── */
+.rr-filter-strip {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+@media (max-width: 700px) {
+  .rr-filter-strip {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding-bottom: 4px;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .rr-filter-strip::-webkit-scrollbar { display: none; }
+}
+
+/* ── Section headings ─────────────────────────────────────────────── */
+.rr-section-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text);
+  margin: 0;
+}
+.rr-section-sub {
+  font-size: 13px;
+  color: var(--text-soft);
+  margin: 4px 0 0;
+}
+
+/* ── Toggle switch ────────────────────────────────────────────────── */
+.rr-toggle {
+  transition: background 0.2s ease;
+}
+.rr-toggle-thumb {
+  transition: left 0.2s ease;
+}

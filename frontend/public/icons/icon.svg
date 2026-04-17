@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- Background -->
+  <rect width="512" height="512" rx="96" fill="#0a0c10"/>
+
+  <!-- Outer glow ring -->
+  <circle cx="256" cy="256" r="190" fill="none" stroke="#c9a84c" stroke-width="2" opacity="0.3"/>
+
+  <!-- Diamond gem shape -->
+  <!-- Top facet row -->
+  <polygon points="256,100 196,196 256,216 316,196" fill="#e8c970"/>
+  <polygon points="256,100 316,196 380,196 328,130" fill="#d4b558"/>
+  <polygon points="256,100 196,196 132,196 184,130" fill="#f0d878"/>
+
+  <!-- Middle band -->
+  <polygon points="132,196 196,196 256,216 196,260" fill="#c9a84c"/>
+  <polygon points="316,196 380,196 316,260 256,216" fill="#b8943e"/>
+
+  <!-- Bottom facets -->
+  <polygon points="196,260 256,216 316,260 256,400" fill="#c9a84c"/>
+  <polygon points="132,196 196,260 256,400" fill="#a07830" opacity="0.9"/>
+  <polygon points="380,196 316,260 256,400" fill="#d4a840" opacity="0.9"/>
+
+  <!-- Highlight sparkle -->
+  <polygon points="256,100 316,196 256,216" fill="#fff" opacity="0.15"/>
+  <circle cx="220" cy="165" r="8" fill="#fff" opacity="0.25"/>
+</svg>

@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- Full bleed background (maskable — safe zone is center 80%) -->
+  <rect width="512" height="512" fill="#0a0c10"/>
+
+  <!-- Diamond gem — centered within safe zone -->
+  <polygon points="256,128 206,216 256,234 306,216" fill="#e8c970"/>
+  <polygon points="256,128 306,216 358,216 316,152" fill="#d4b558"/>
+  <polygon points="256,128 206,216 154,216 196,152" fill="#f0d878"/>
+
+  <polygon points="154,216 206,216 256,234 206,272" fill="#c9a84c"/>
+  <polygon points="306,216 358,216 306,272 256,234" fill="#b8943e"/>
+
+  <polygon points="206,272 256,234 306,272 256,384" fill="#c9a84c"/>
+  <polygon points="154,216 206,272 256,384" fill="#a07830" opacity="0.9"/>
+  <polygon points="358,216 306,272 256,384" fill="#d4a840" opacity="0.9"/>
+
+  <polygon points="256,128 306,216 256,234" fill="#fff" opacity="0.15"/>
+  <circle cx="226" cy="178" r="7" fill="#fff" opacity="0.25"/>
+</svg>
